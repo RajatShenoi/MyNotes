@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/helpers/loading/before_initialization.dart';
 import 'package:mynotes/helpers/loading/loading_screen.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
@@ -15,6 +19,16 @@ import 'package:mynotes/views/verify_email_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // We're explicity checking if we're not on web first and then checking on android since
+  // not following this leads to an error on the web build.
+  if (!kIsWeb) {
+    // If we're running on an Android device, check for an update and guide the user based on that.
+    if (Platform.isAndroid) {
+      checkAndPerformUpdates();
+    }
+  }
+
   runApp(
     MaterialApp(
       title: 'My Notes',
