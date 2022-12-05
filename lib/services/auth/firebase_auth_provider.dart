@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mynotes/firebase_options.dart';
 import 'package:mynotes/services/auth/auth_user.dart';
@@ -12,6 +13,10 @@ class FirebaseAuthProvider implements AuthProvider {
   Future<void> initialize() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await FirebaseAppCheck.instance.activate(
+      webRecaptchaSiteKey: "6Ldl3FEjAAAAAKPFJlvZPL1kR4zb34NkIZRoQp81",
+      androidProvider: AndroidProvider.debug,
     );
   }
 
