@@ -3,7 +3,6 @@ import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/utilities/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:mynotes/utilities/generics/get_arguments.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
-import 'package:mynotes/services/cloud/cloud_storage_exceptions.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -108,24 +107,27 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: createOrGetExistingNote(context),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              _setupTextControllerListener();
-              return TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your note...',
-                ),
-              );
-            default:
-              return const CircularProgressIndicator();
-          }
-        },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: FutureBuilder(
+          future: createOrGetExistingNote(context),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                _setupTextControllerListener();
+                return TextField(
+                  controller: _textController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    hintText: 'Start typing your note...',
+                  ),
+                );
+              default:
+                return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }
