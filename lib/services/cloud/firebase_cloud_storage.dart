@@ -19,7 +19,10 @@ class FirebaseCloudStorage {
     required String text,
   }) async {
     try {
-      await notes.doc(documentId).update({textFieldName: text});
+      await notes.doc(documentId).update({
+        textFieldName: text,
+        timeStampName: FieldValue.serverTimestamp(),
+      });
     } catch (e) {
       throw CouldNotUpdateNoteException();
     }
@@ -28,6 +31,7 @@ class FirebaseCloudStorage {
   Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) {
     final allNotes = notes
         .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+        .orderBy(timeStampName, descending: true)
         .snapshots()
         .map((event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)));
     return allNotes;
@@ -37,6 +41,7 @@ class FirebaseCloudStorage {
     final document = await notes.add({
       ownerUserIdFieldName: ownerUserId,
       textFieldName: '',
+      timeStampName: FieldValue.serverTimestamp(),
     });
     final fetchedNote = await document.get();
     return CloudNote(

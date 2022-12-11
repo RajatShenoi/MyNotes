@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
 import 'package:mynotes/utilities/dialogs/error_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynotes/utilities/dialogs/loading_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -106,7 +104,7 @@ class _LoginViewState extends State<LoginView> {
                           const AuthEventShouldRegister(),
                         );
                   },
-                  child: const Text('Not registered yet? Register here!'),
+                  child: const Text("Don't have an account? Register here!"),
                 )
               ],
             ),

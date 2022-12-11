@@ -7,6 +7,8 @@ import 'package:mynotes/utilities/dialogs/logout_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:url_launcher/url_launcher_string.dart';
+
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -77,6 +79,7 @@ class NavDrawer extends StatelessWidget {
         ),
       );
     } else {
+      // If the platform is not Web
       return Drawer(
         child: ListView(
           children: [
@@ -90,7 +93,7 @@ class NavDrawer extends StatelessWidget {
               child: Text(
                 "Menu",
                 style: TextStyle(
-                  color: Colors.purple,
+                  color: Colors.white,
                   fontSize: 25,
                 ),
               ),
