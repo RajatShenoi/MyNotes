@@ -57,6 +57,11 @@ class _NotesViewState extends State<NotesView> {
                       arguments: note,
                     );
                   },
+                  onCheckValueChanged: (note) async {
+                    await _notesService.updateCheck(
+                        documentId: note.documentId,
+                        newCheckedValue: !note.isChecked);
+                  },
                 );
               } else {
                 return const Center(child: CircularProgressIndicator());

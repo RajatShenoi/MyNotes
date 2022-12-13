@@ -28,6 +28,19 @@ class FirebaseCloudStorage {
     }
   }
 
+  Future<void> updateCheck({
+    required String documentId,
+    required bool newCheckedValue,
+  }) async {
+    try {
+      await notes.doc(documentId).update({
+        isCheckedName: newCheckedValue,
+      });
+    } catch (e) {
+      throw CouldNotUpdateNoteException();
+    }
+  }
+
   Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) {
     final allNotes = notes
         .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
@@ -48,6 +61,7 @@ class FirebaseCloudStorage {
       documentId: fetchedNote.id,
       ownerUserId: ownerUserId,
       text: '',
+      isChecked: false,
     );
   }
 

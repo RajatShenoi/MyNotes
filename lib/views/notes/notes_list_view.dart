@@ -8,12 +8,14 @@ class NotesListView extends StatelessWidget {
   final Iterable<CloudNote> notes;
   final NoteCallback onDeleteNote;
   final NoteCallback onTap;
+  final NoteCallback onCheckValueChanged;
 
   const NotesListView({
     Key? key,
     required this.notes,
     required this.onDeleteNote,
     required this.onTap,
+    required this.onCheckValueChanged,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,12 @@ class NotesListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final note = notes.elementAt(index);
         return ListTile(
+          leading: Checkbox(
+            value: note.isChecked,
+            onChanged: (bool? value) async {
+              onCheckValueChanged(note);
+            },
+          ),
           onTap: () {
             onTap(note);
           },
