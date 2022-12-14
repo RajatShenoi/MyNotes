@@ -3,12 +3,13 @@ import 'package:mynotes/utilities/dialogs/generic_dialog.dart';
 
 Future<void> showNotificationDialog(
   BuildContext context,
-  String text,
+  String heading,
+  String body,
 ) {
   return showGenericDialog<void>(
     context: context,
-    title: 'New Notification',
-    content: text,
+    title: heading,
+    content: body,
     optionsBuilder: () => {
       'OK': null,
     },

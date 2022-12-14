@@ -1,10 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
+import 'package:mynotes/utilities/dialogs/notification_dialog.dart';
 import 'package:mynotes/views/notes/notes_list_view.dart';
 import 'package:mynotes/widgets/nav_drawer.dart';
+import 'dart:developer' as devtools show log;
 
 class NotesView extends StatefulWidget {
   const NotesView({Key? key}) : super(key: key);
@@ -25,6 +28,22 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   Widget build(BuildContext context) {
+    try {
+      FirebaseMessaging.onMessageOpenedApp.listen(
+        (RemoteMessage message) {
+          devtools.log(
+              "A notification with ${message.messageId} was opened when the app was terminated.");
+          showNotificationDialog(
+            context,
+            message.notification!.title!,
+            message.notification!.body!,
+          );
+        },
+      );
+    } catch (e) {
+      devtools
+          .log("There was an error in setting up the notifications system.");
+    }
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(

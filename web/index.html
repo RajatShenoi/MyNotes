@@ -38,6 +38,10 @@
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+
+  <!-- Required for FLUTTER WEB NOTIFICATIONS FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-messaging.js"></script>
 </head>
 <body>
   <!-- Comment the below during production builds -->
@@ -45,6 +49,32 @@
     self.FIREBASE_APPCHECK_DEBUG_TOKEN = "244D4F78-9E14-4F21-B2CB-593592E5C2B9";
   </script>
   <!-- Comment out till the above -->
+
+  <!-- For FIREBASE NOTIFICATIONS -->
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAGZbAu-pPgUZ-9JYp2XDWFLImYCiV7-3Y",
+      authDomain: "rs-mynotes.firebaseapp.com",
+      projectId: "rs-mynotes",
+      storageBucket: "rs-mynotes.appspot.com",
+      messagingSenderId: "8157476405",
+      appId: "1:8157476405:web:a8b8f6352def393014a37c",
+      measurementId: "G-YGPXKSFFBD"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      });
+    }
+  </script> 
+
+
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

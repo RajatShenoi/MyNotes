@@ -55,6 +55,7 @@ class FirebaseCloudStorage {
       ownerUserIdFieldName: ownerUserId,
       textFieldName: '',
       timeStampName: FieldValue.serverTimestamp(),
+      isCheckedName: false,
     });
     final fetchedNote = await document.get();
     return CloudNote(
