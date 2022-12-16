@@ -8,9 +8,11 @@ class CloudNote {
   final String ownerUserId;
   final String text;
   final bool isChecked;
+  final String heading;
   const CloudNote({
     required this.documentId,
     required this.ownerUserId,
+    required this.heading,
     required this.text,
     required this.isChecked,
   });
@@ -18,7 +20,7 @@ class CloudNote {
   CloudNote.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
         ownerUserId = snapshot.data()[ownerUserIdFieldName],
+        heading = snapshot.data()[headingFieldName] as String,
         text = snapshot.data()[textFieldName] as String,
-        // The below cast is required even though it asks us to remove the cast
         isChecked = snapshot.data()[isCheckedName] as bool;
 }

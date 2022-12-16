@@ -16,10 +16,12 @@ class FirebaseCloudStorage {
 
   Future<void> updateNote({
     required String documentId,
+    required String heading,
     required String text,
   }) async {
     try {
       await notes.doc(documentId).update({
+        headingFieldName: heading,
         textFieldName: text,
         timeStampName: FieldValue.serverTimestamp(),
       });
@@ -53,6 +55,7 @@ class FirebaseCloudStorage {
   Future<CloudNote> createNewNote({required String ownerUserId}) async {
     final document = await notes.add({
       ownerUserIdFieldName: ownerUserId,
+      headingFieldName: '',
       textFieldName: '',
       timeStampName: FieldValue.serverTimestamp(),
       isCheckedName: false,
@@ -61,6 +64,7 @@ class FirebaseCloudStorage {
     return CloudNote(
       documentId: fetchedNote.id,
       ownerUserId: ownerUserId,
+      heading: '',
       text: '',
       isChecked: false,
     );

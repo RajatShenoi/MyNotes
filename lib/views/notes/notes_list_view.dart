@@ -44,6 +44,12 @@ class NotesListView extends StatelessWidget {
             onTap(note);
           },
           title: Text(
+            (note.heading.trim() != "") ? note.heading : "Note",
+            maxLines: 1,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
             note.text,
             maxLines: 1,
             softWrap: true,

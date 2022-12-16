@@ -16,13 +16,29 @@ class CreateUpdateNoteView extends StatefulWidget {
 class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   CloudNote? _note;
   late final FirebaseCloudStorage _notesService;
+  late final TextEditingController _headingController;
   late final TextEditingController _textController;
 
   @override
   void initState() {
     _notesService = FirebaseCloudStorage();
+    _headingController = TextEditingController();
     _textController = TextEditingController();
     super.initState();
+  }
+
+  void _headingControllerListener() async {
+    final note = _note;
+    if (note == null) {
+      return;
+    }
+    final heading = _headingController.text;
+    final text = _textController.text;
+    await _notesService.updateNote(
+      documentId: note.documentId,
+      heading: heading,
+      text: text,
+    );
   }
 
   void _textControllerListener() async {
@@ -30,16 +46,20 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     if (note == null) {
       return;
     }
+    final heading = _headingController.text;
     final text = _textController.text;
     await _notesService.updateNote(
       documentId: note.documentId,
+      heading: heading,
       text: text,
     );
   }
 
-  void _setupTextControllerListener() {
+  void _setupControllerListeners() {
     _textController.removeListener(_textControllerListener);
+    _headingController.removeListener(_headingControllerListener);
     _textController.addListener(_textControllerListener);
+    _headingController.addListener(_headingControllerListener);
   }
 
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
@@ -47,6 +67,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
     if (widgetNote != null) {
       _note = widgetNote;
+      _headingController.text = widgetNote.heading;
       _textController.text = widgetNote.text;
       return widgetNote;
     }
@@ -64,17 +85,19 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
   void _deleteNoteIfTextIsEmpty() {
     final note = _note;
-    if (_textController.text.isEmpty && note != null) {
+    if (_textController.text.trim().isEmpty && note != null) {
       _notesService.deleteNote(documentId: note.documentId);
     }
   }
 
   void _saveNoteIfTextNotEmpty() async {
     final note = _note;
-    final text = _textController.text;
+    final text = _textController.text.trim();
+    final heading = _headingController.text.trim();
     if (note != null && text.isNotEmpty) {
       await _notesService.updateNote(
         documentId: note.documentId,
+        heading: heading,
         text: text,
       );
     }
@@ -85,6 +108,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     _deleteNoteIfTextIsEmpty();
     _saveNoteIfTextNotEmpty();
     _textController.dispose();
+    _headingController.dispose();
     super.dispose();
   }
 
@@ -114,14 +138,27 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
-                _setupTextControllerListener();
-                return TextField(
-                  controller: _textController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    hintText: 'Start typing your note...',
-                  ),
+                _setupControllerListeners();
+                return Column(
+                  children: [
+                    TextField(
+                      controller: _headingController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        hintText: 'Give your note a short title.',
+                        label: Text("Short Title (optional)"),
+                      ),
+                    ),
+                    TextField(
+                      controller: _textController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                          hintText: 'Start typing your note...',
+                          label: Text("Detailed Note Content (required)")),
+                    ),
+                  ],
                 );
               default:
                 return const Center(child: CircularProgressIndicator());
