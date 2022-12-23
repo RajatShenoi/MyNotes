@@ -1,13 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/utilities/dialogs/logout_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:developer' as devtools show log;
-
-import 'package:url_launcher/url_launcher_string.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -31,6 +30,20 @@ class NavDrawer extends StatelessWidget {
                   fontSize: 25,
                 ),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Home"),
+              onTap: (() {
+                Navigator.pushNamed(context, '/');
+              }),
+            ),
+            ListTile(
+              leading: const Icon(Icons.library_add_check),
+              title: const Text("Checked Notes"),
+              onTap: () {
+                Navigator.pushNamed(context, checkedNotesRoute);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.get_app),
@@ -97,6 +110,20 @@ class NavDrawer extends StatelessWidget {
                   fontSize: 25,
                 ),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Home"),
+              onTap: (() {
+                Navigator.pushNamed(context, '/');
+              }),
+            ),
+            ListTile(
+              leading: const Icon(Icons.library_add_check),
+              title: const Text("Checked Notes"),
+              onTap: () {
+                Navigator.pushNamed(context, checkedNotesRoute);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.feedback),

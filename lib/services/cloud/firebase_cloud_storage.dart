@@ -46,6 +46,17 @@ class FirebaseCloudStorage {
   Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) {
     final allNotes = notes
         .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+        .where(isCheckedName, isEqualTo: false)
+        .orderBy(timeStampName, descending: true)
+        .snapshots()
+        .map((event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)));
+    return allNotes;
+  }
+
+  Stream<Iterable<CloudNote>> allCheckedNotes({required String ownerUserId}) {
+    final allNotes = notes
+        .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+        .where(isCheckedName, isEqualTo: true)
         .orderBy(timeStampName, descending: true)
         .snapshots()
         .map((event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)));
@@ -58,7 +69,7 @@ class FirebaseCloudStorage {
       headingFieldName: '',
       textFieldName: '',
       timeStampName: FieldValue.serverTimestamp(),
-      isCheckedName: false,
+      isCheckedName: true,
     });
     final fetchedNote = await document.get();
     return CloudNote(
@@ -66,7 +77,7 @@ class FirebaseCloudStorage {
       ownerUserId: ownerUserId,
       heading: '',
       text: '',
-      isChecked: false,
+      isChecked: true,
     );
   }
 
