@@ -69,7 +69,7 @@ class FirebaseCloudStorage {
       headingFieldName: '',
       textFieldName: '',
       timeStampName: FieldValue.serverTimestamp(),
-      isCheckedName: true,
+      isCheckedName: false,
     });
     final fetchedNote = await document.get();
     return CloudNote(
@@ -77,7 +77,7 @@ class FirebaseCloudStorage {
       ownerUserId: ownerUserId,
       heading: '',
       text: '',
-      isChecked: true,
+      isChecked: false,
     );
   }
 
