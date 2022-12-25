@@ -48,6 +48,14 @@ class _CheckedNotesViewState extends State<CheckedNotesView> {
       drawer: NavDrawer(),
       appBar: AppBar(
         title: const Text('Your Checked Notes'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/');
+            },
+            icon: const Icon(Icons.home),
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: _notesService.allCheckedNotes(ownerUserId: userId),

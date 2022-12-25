@@ -51,6 +51,12 @@ class _NotesViewState extends State<NotesView> {
         actions: [
           IconButton(
             onPressed: () {
+              Navigator.of(context).pushNamed(checkedNotesRoute);
+            },
+            icon: const Icon(Icons.library_add_check),
+          ),
+          IconButton(
+            onPressed: () {
               Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
             },
             icon: const Icon(Icons.add),

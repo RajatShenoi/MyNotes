@@ -38,6 +38,15 @@ class NotesListView extends StatelessWidget {
             value: note.isChecked,
             onChanged: (bool? value) async {
               onCheckValueChanged(note);
+              final snackBar = SnackBar(
+                content: Text(
+                    "\"${(note.heading.trim() == '' ? 'Note' : note.heading.trim())}\" moved to ${note.isChecked ? "Home Page" : "Checked Notes"}."),
+                action: SnackBarAction(
+                  label: "Close",
+                  onPressed: () {},
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
           ),
           onTap: () {
