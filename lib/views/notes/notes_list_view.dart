@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/firebase_options.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
@@ -21,6 +22,10 @@ class NotesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final notesListPageSnackbarActionText =
+        remoteConfig.getString("notes_list_page_snackbar_action_text");
+
     return ListView.builder(
       itemCount: notes.length,
       itemBuilder: (context, index) {
@@ -42,7 +47,7 @@ class NotesListView extends StatelessWidget {
                 content: Text(
                     "\"${(note.heading.trim() == '' ? 'Note' : note.heading.trim())}\" moved to ${note.isChecked ? "Home Page" : "Checked Notes"}."),
                 action: SnackBarAction(
-                  label: "Close",
+                  label: notesListPageSnackbarActionText,
                   onPressed: () {},
                 ),
               );

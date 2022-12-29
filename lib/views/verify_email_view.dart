@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,27 +14,38 @@ class VerifyEmailView extends StatefulWidget {
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final verifyEmailPageScaffoldTitle =
+        remoteConfig.getString('verify_email_page_scaffold_title');
+    final verify_email_page_message_1 =
+        remoteConfig.getString('verify_email_page_message_1');
+    final verify_email_page_message_2 =
+        remoteConfig.getString('verify_email_page_message_2');
+    final verify_email_page_message_3 =
+        remoteConfig.getString('verify_email_page_message_3');
+    final verify_email_page_resend_button_text =
+        remoteConfig.getString('verify_email_page_resend_button_text');
+    final verify_email_page_restart_button_text =
+        remoteConfig.getString('verify_email_page_restart_button_text');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verify email'),
+        title: Text(verifyEmailPageScaffoldTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const Text(
-                  "We've sent you an email verification. Please open it to verify your account."),
-              const Text("Do check the spam or junk email folders too."),
-              const Text(
-                  "If you haven't received a verification email yet (even after checking in the spam and junk folders), press the button below"),
+              Text(verify_email_page_message_1),
+              Text(verify_email_page_message_2),
+              Text(verify_email_page_message_3),
               TextButton(
                 onPressed: () {
                   context.read<AuthBloc>().add(
                         const AuthEventSendEmailVerification(),
                       );
                 },
-                child: const Text('Send email verification'),
+                child: Text(verify_email_page_resend_button_text),
               ),
               TextButton(
                 onPressed: () async {
@@ -41,7 +53,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                         const AuthEventLogOut(),
                       );
                 },
-                child: const Text('Restart'),
+                child: Text(verify_email_page_restart_button_text),
               )
             ],
           ),

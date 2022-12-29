@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
@@ -33,39 +34,58 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final loginPageScaffoldTitle =
+        remoteConfig.getString('login_page_scaffold_title');
+    final loginPageMessage = remoteConfig.getString('login_page_message');
+    final loginPageEmailHint = remoteConfig.getString('login_page_email_hint');
+    final loginPagePasswordHint =
+        remoteConfig.getString('login_page_password_hint');
+    final loginPageLoginButtonText =
+        remoteConfig.getString('login_page_login_button_text');
+    final loginPageRegisterButtonText =
+        remoteConfig.getString('login_page_register_button_text');
+    final loginPageForgotPasswordButtonText =
+        remoteConfig.getString('login_page_forgot_password_button_text');
+    final loginPageUserNotFoundErrorMessage =
+        remoteConfig.getString('login_page_user_not_found_error_message');
+    final loginPageWrongPasswordErrorMessage =
+        remoteConfig.getString('login_page_wrong_password_error_message');
+    final loginPageGenericErrorMessage =
+        remoteConfig.getString('login_page_generic_error_message');
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
           if (state.exception is UserNotFoundAuthException) {
             await showErrorDialog(
               context,
-              'Cannot find a user with the entered credentials!',
+              loginPageUserNotFoundErrorMessage,
             );
           } else if (state.exception is WrongPasswordAuthException) {
-            await showErrorDialog(context, 'Wrong credentials');
+            await showErrorDialog(context, loginPageWrongPasswordErrorMessage);
           } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Authentication error');
+            await showErrorDialog(context, loginPageGenericErrorMessage);
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          title: Text(loginPageScaffoldTitle),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                    'Please log in to your account in order to interact with and create notes!'),
+                Text(loginPageMessage),
                 TextField(
                   controller: _email,
                   enableSuggestions: false,
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your email here',
+                  decoration: InputDecoration(
+                    hintText: loginPageEmailHint,
                   ),
                 ),
                 TextField(
@@ -73,8 +93,8 @@ class _LoginViewState extends State<LoginView> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your password here',
+                  decoration: InputDecoration(
+                    hintText: loginPagePasswordHint,
                   ),
                 ),
                 TextButton(
@@ -88,7 +108,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         );
                   },
-                  child: const Text('Login'),
+                  child: Text(loginPageLoginButtonText),
                 ),
                 TextButton(
                   onPressed: () {
@@ -96,7 +116,7 @@ class _LoginViewState extends State<LoginView> {
                           const AuthEventForgotPassword(),
                         );
                   },
-                  child: const Text('I forgot my password'),
+                  child: Text(loginPageForgotPasswordButtonText),
                 ),
                 TextButton(
                   onPressed: () {
@@ -104,7 +124,7 @@ class _LoginViewState extends State<LoginView> {
                           const AuthEventShouldRegister(),
                         );
                   },
-                  child: const Text("Don't have an account? Register here!"),
+                  child: Text(loginPageRegisterButtonText),
                 )
               ],
             ),

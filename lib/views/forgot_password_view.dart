@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
@@ -30,6 +31,19 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final forgotPasswordPageScaffoldTitle =
+        remoteConfig.getString('forgot_password_page_scaffold_title');
+    final forgotPasswordPageMessage =
+        remoteConfig.getString('forgot_password_page_message');
+    final forgotPasswordPageEmailHint =
+        remoteConfig.getString('forgot_password_page_email_hint');
+    final forgotPasswordPageSendButtonText =
+        remoteConfig.getString('forgot_password_page_send_button_text');
+    final forgotPasswordLoginButtonText =
+        remoteConfig.getString('forgot_password_page_login_button_text');
+    final forgotPasswordGenericErrorMessage =
+        remoteConfig.getString('forgot_password_page_generic_error_message');
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateForgotPassword) {
@@ -38,29 +52,27 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             await showPasswordResetSentDialog(context);
           }
           if (state.exception != null) {
-            await showErrorDialog(context,
-                'We could not process your request. Please make sure that you are a registered user, or if not, register a user now by going back one step.');
+            await showErrorDialog(context, forgotPasswordGenericErrorMessage);
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Forgot Password'),
+          title: Text(forgotPasswordPageScaffoldTitle),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                    'If you forgot your password, simply enter your email and we will send you a password reset link.'),
+                Text(forgotPasswordPageMessage),
                 TextField(
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
                   autofocus: true,
                   controller: _controller,
-                  decoration: const InputDecoration(
-                    hintText: 'Your email address....',
+                  decoration: InputDecoration(
+                    hintText: forgotPasswordPageEmailHint,
                   ),
                 ),
                 TextButton(
@@ -70,7 +82,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         .read<AuthBloc>()
                         .add(AuthEventForgotPassword(email: email));
                   },
-                  child: const Text('Send me password reset link'),
+                  child: Text(forgotPasswordPageSendButtonText),
                 ),
                 TextButton(
                   onPressed: () {
@@ -78,7 +90,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                           const AuthEventLogOut(),
                         );
                   },
-                  child: const Text('Back to login page'),
+                  child: Text(forgotPasswordLoginButtonText),
                 ),
               ],
             ),

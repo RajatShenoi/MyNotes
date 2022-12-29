@@ -17,9 +17,10 @@ class FirebaseAuthProvider implements AuthProvider {
     );
     await FirebaseAppCheck.instance.activate(
       webRecaptchaSiteKey: "6Ldl3FEjAAAAAKPFJlvZPL1kR4zb34NkIZRoQp81",
-      androidProvider: AndroidProvider.playIntegrity,
+      androidProvider: AndroidProvider.debug,
     );
     await firebaseCloudMessagingBackground();
+    await setUpRemoteConfigDefaultValues();
   }
 
   @override

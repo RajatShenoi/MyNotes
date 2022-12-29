@@ -1,8 +1,7 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
-import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
@@ -35,39 +34,63 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final registerPageScaffoldTitle =
+        remoteConfig.getString('register_page_scaffold_title');
+    final registerPageMessage = remoteConfig.getString('register_page_message');
+    final registerPageEmailHint =
+        remoteConfig.getString('register_page_email_hint');
+    final registerPagePasswordHint =
+        remoteConfig.getString('register_page_password_hint');
+    final registerPageRegisterButtonText =
+        remoteConfig.getString('register_page_register_button_text');
+    final registerPageLoginButtonText =
+        remoteConfig.getString('register_page_login_button_text');
+    final registerPageWeakPasswordErrorMessage =
+        remoteConfig.getString('register_page_weak_password_error_message');
+    final registerPageEmailAlreadyInUseErrorMessage = remoteConfig
+        .getString('register_page_email_already_in_use_error_message');
+    final registerPageGenericErrorMessage =
+        remoteConfig.getString('register_page_generic_error_message');
+    final registerPageInvalidEmailErrorMessage =
+        remoteConfig.getString('register_page_invalid_email_error_message');
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateRegistering) {
           if (state.exception is WeakPasswordAuthException) {
-            await showErrorDialog(context, 'Weak password');
+            await showErrorDialog(
+                context, registerPageWeakPasswordErrorMessage);
           } else if (state.exception is EmailAlreadyInUseAuthException) {
-            await showErrorDialog(context, 'Email is already in use');
+            await showErrorDialog(
+                context, registerPageEmailAlreadyInUseErrorMessage);
           } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Failed to register');
+            await showErrorDialog(context, registerPageGenericErrorMessage);
           } else if (state.exception is InvalidEmailAuthException) {
-            await showErrorDialog(context, 'Invalid email');
+            await showErrorDialog(
+                context, registerPageInvalidEmailErrorMessage);
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Register'),
+          title: Text(registerPageScaffoldTitle),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Enter your email and password to see your notes!'),
+                Text(registerPageMessage),
                 TextField(
                   controller: _email,
                   enableSuggestions: false,
                   autocorrect: false,
                   autofocus: true,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your email here',
+                  decoration: InputDecoration(
+                    hintText: registerPageEmailHint,
                   ),
                 ),
                 TextField(
@@ -75,8 +98,8 @@ class _RegisterViewState extends State<RegisterView> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your password here',
+                  decoration: InputDecoration(
+                    hintText: registerPagePasswordHint,
                   ),
                 ),
                 Center(
@@ -93,7 +116,7 @@ class _RegisterViewState extends State<RegisterView> {
                                 ),
                               );
                         },
-                        child: const Text('Register'),
+                        child: Text(registerPageRegisterButtonText),
                       ),
                       TextButton(
                         onPressed: () {
@@ -101,7 +124,7 @@ class _RegisterViewState extends State<RegisterView> {
                                 const AuthEventLogOut(),
                               );
                         },
-                        child: const Text('Already registered? Login here!'),
+                        child: Text(registerPageLoginButtonText),
                       ),
                     ],
                   ),

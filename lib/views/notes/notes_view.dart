@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
@@ -28,6 +29,9 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   Widget build(BuildContext context) {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    final notesPageScaffoldTitle =
+        remoteConfig.getString("notes_page_scaffold_title");
     try {
       FirebaseMessaging.onMessageOpenedApp.listen(
         (RemoteMessage message) {
@@ -47,7 +51,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
-        title: const Text('Your Notes'),
+        title: Text(notesPageScaffoldTitle),
         actions: [
           IconButton(
             onPressed: () {
