@@ -1,3 +1,5 @@
+[![Flutter Workflow](https://github.com/RajatShenoi/MyNotes/actions/workflows/main.yml/badge.svg)](https://github.com/RajatShenoi/MyNotes/actions/workflows/main.yml)
+
 # MyNotes
 
 A Flutter Application which is primarily focused for the WEB and ANDROID platforms. The same code may or may not work on iOS, macOS, windows or other platforms. Complete functinality is not guarenteed for other platforms and NO BUG FIX REQUESTS will be entertained for the platforms NOT SUPPORTED.
