@@ -1,0 +1,33 @@
+name: Flutter Workflow
+
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.9"
+          channel: "stable"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - run: flutter build apk
+      - run: flutter build appbundle
+      - run: flutter build ios --release --no-codesign
+      - run: flutter build web
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-release
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+            build/ios/iphoneos/Runner.app
+            build/web
