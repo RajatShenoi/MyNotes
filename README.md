@@ -1,4 +1,6 @@
-[![Flutter Workflow](https://github.com/RajatShenoi/MyNotes/actions/workflows/main.yml/badge.svg)](https://github.com/RajatShenoi/MyNotes/actions/workflows/main.yml)
+[![Android Builds](https://github.com/RajatShenoi/MyNotes/actions/workflows/main.yml/badge.svg)](https://github.com/RajatShenoi/MyNotes/actions/workflows/main.yml)
+
+[![Web Builds](https://github.com/RajatShenoi/MyNotes/actions/workflows/web.yml/badge.svg)](https://github.com/RajatShenoi/MyNotes/actions/workflows/web.yml)
 
 # MyNotes
 
@@ -13,6 +15,10 @@ To use this app, you may visit any of the below links:
 - [https://play.google.com/store/apps/details?id=com.RajatShenoi.mynotes](https://play.google.com/store/apps/details?id=com.RajatShenoi.mynotes) to download the app on android through the Google Play Store
 - The application is also available on the Amazon Appstore, however that store is not guarenteed to be up-to-date. If you find that the data there is not up-to-date, please raise an issue or contact me [developer.rajat.shenoi@gmail.com](mailto:developer.rajat.shenoi@gmail.com) and i'll be sure to update it.
 - All the previous versions are available in the [releases](https://github.com/RajatShenoi/MyNotes/releases) page.
+
+As soon as a new **commit** is pushed on GitHub, GitHub actions automatically creates an APK and APP Bundle for Android and a zip folder for Web with the default upload key. The upload key will automatically be changed to the play store signing key when uploaded to the Play Console.
+
+The default signing key's SHA fingerprint is also added to the Firebase App Check to allow usage of the app signed using that key.
 
 ## Features
 
