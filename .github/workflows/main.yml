@@ -1,39 +1,67 @@
-name: Flutter Workflow
+# name: Flutter Workflow
 
+# on: [push, workflow_dispatch]
+# jobs:
+#   build:
+#     runs-on: macos-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - uses: actions/setup-java@v2
+#         with:
+#           distribution: "zulu"
+#           java-version: "11"
+
+#       - name: Install Flutter
+#         uses: subosito/flutter-action@v2
+#         with:
+#           flutter-version: "3.3.9"
+#           channel: "stable"
+#           architecture: "x64"
+
+#       - name: Install dependencies
+#         run: flutter pub get
+
+#       - run: flutter build apk
+#       - run: flutter build appbundle
+#       - run: flutter build ios --release --no-codesign
+#       - run: flutter build web
+
+#       - name: Upload artifacts
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: apk-release
+#           path: |
+#             build/app/outputs/flutter-apk/app-release.apk
+#             build/app/outputs/bundle/release/app-release.aab
+#             build/ios/iphoneos/Runner.app
+#             build/web
+
+name: Android APK
 on: [push, workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with:
           distribution: "zulu"
           java-version: "11"
-
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.3.9"
-          channel: "stable"
-          architecture: "x64"
-
-      - name: Install dependencies
-        run: flutter pub get
-
+          flutter-version: "3.0.5"
+      - run: flutter pub get
       - run: flutter build apk
       - run: flutter build appbundle
-      - run: flutter build ios --release --no-codesign
-      - run: flutter build web
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
         with:
-          name: apk-release
-          path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
-            build/ios/iphoneos/Runner.app
-            build/web
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: build/app/outputs/bundle/release/app-release.aab
