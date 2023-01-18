@@ -1,0 +1,19 @@
+name: Web Builds
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.9"
+          channel: "stable"
+      - run: flutter pub get
+      - run: flutter build web
+
+      - name: Upload Web Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build Folder
+          path: build/web/
